@@ -22,7 +22,8 @@ import {
   Search,
   Bell,
   Download,
-  Gift
+  Gift,
+  X
 } from "lucide-react";
 import AuthModal from "@/components/AuthModal";
 import Dashboard from "@/components/Dashboard";
@@ -31,6 +32,8 @@ const Index = () => {
   const [showAuth, setShowAuth] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
+  const [showVideoLibrary, setShowVideoLibrary] = useState(false);
+  const [selectedCourseType, setSelectedCourseType] = useState<string>('');
 
   if (isLoggedIn) {
     return <Dashboard />;
@@ -45,7 +48,14 @@ const Index = () => {
       lessons: 12,
       color: "from-blue-500 to-cyan-500",
       difficulty: "Beginner",
-      students: "2.5K+"
+      students: "2.5K+",
+      type: "website",
+      videos: [
+        { title: "Introduction to No-Code", duration: "5:30" },
+        { title: "Setting up your first website", duration: "8:45" },
+        { title: "Adding components", duration: "7:20" },
+        { title: "Styling and themes", duration: "6:15" }
+      ]
     },
     {
       icon: <Video className="w-6 h-6" />,
@@ -55,7 +65,14 @@ const Index = () => {
       lessons: 18,
       color: "from-purple-500 to-pink-500",
       difficulty: "Intermediate",
-      students: "1.8K+"
+      students: "1.8K+",
+      type: "video",
+      videos: [
+        { title: "AI Video Tools Introduction", duration: "4:20" },
+        { title: "Creating cinematic shots", duration: "12:30" },
+        { title: "Adding effects and transitions", duration: "9:45" },
+        { title: "Professional editing tips", duration: "11:20" }
+      ]
     },
     {
       icon: <Music className="w-6 h-6" />,
@@ -65,7 +82,14 @@ const Index = () => {
       lessons: 15,
       color: "from-green-500 to-emerald-500",
       difficulty: "Beginner",
-      students: "3.2K+"
+      students: "3.2K+",
+      type: "audio",
+      videos: [
+        { title: "AI Voice Generation", duration: "6:40" },
+        { title: "Music creation with AI", duration: "8:20" },
+        { title: "Audio editing basics", duration: "7:30" },
+        { title: "Professional mixing", duration: "9:10" }
+      ]
     },
     {
       icon: <User className="w-6 h-6" />,
@@ -75,7 +99,14 @@ const Index = () => {
       lessons: 20,
       color: "from-orange-500 to-red-500",
       difficulty: "Advanced",
-      students: "950+"
+      students: "950+",
+      type: "model",
+      videos: [
+        { title: "Creating AI personas", duration: "10:15" },
+        { title: "Avatar customization", duration: "8:50" },
+        { title: "Personality training", duration: "12:30" },
+        { title: "Social media integration", duration: "7:45" }
+      ]
     },
     {
       icon: <FileText className="w-6 h-6" />,
@@ -85,7 +116,14 @@ const Index = () => {
       lessons: 10,
       color: "from-indigo-500 to-purple-500",
       difficulty: "Beginner",
-      students: "4.1K+"
+      students: "4.1K+",
+      type: "script",
+      videos: [
+        { title: "Script structure basics", duration: "5:20" },
+        { title: "AI writing prompts", duration: "6:30" },
+        { title: "Character development", duration: "7:15" },
+        { title: "Dialogue writing", duration: "8:00" }
+      ]
     },
     {
       icon: <Zap className="w-6 h-6" />,
@@ -95,16 +133,30 @@ const Index = () => {
       lessons: 16,
       color: "from-yellow-500 to-orange-500",
       difficulty: "Intermediate",
-      students: "1.3K+"
+      students: "1.3K+",
+      type: "automation",
+      videos: [
+        { title: "Workflow basics", duration: "4:45" },
+        { title: "Setting up automation", duration: "9:20" },
+        { title: "Advanced triggers", duration: "8:30" },
+        { title: "Integration tools", duration: "7:50" }
+      ]
     }
   ];
 
   const quickActions = [
-    { icon: <Video className="w-5 h-5" />, title: "Video बनाएं", color: "bg-purple-500" },
-    { icon: <Code className="w-5 h-5" />, title: "Website बनाएं", color: "bg-blue-500" },
-    { icon: <Music className="w-5 h-5" />, title: "Audio बनाएं", color: "bg-green-500" },
-    { icon: <User className="w-5 h-5" />, title: "AI Model", color: "bg-orange-500" }
+    { icon: <Video className="w-5 h-5" />, title: "Video बनाएं", color: "bg-purple-500", type: "video" },
+    { icon: <Code className="w-5 h-5" />, title: "Website बनाएं", color: "bg-blue-500", type: "website" },
+    { icon: <Music className="w-5 h-5" />, title: "Audio बनाएं", color: "bg-green-500", type: "audio" },
+    { icon: <User className="w-5 h-5" />, title: "AI Model", color: "bg-orange-500", type: "model" }
   ];
+
+  const handleQuickActionClick = (type: string) => {
+    setSelectedCourseType(type);
+    setShowVideoLibrary(true);
+  };
+
+  const selectedCourse = courses.find(course => course.type === selectedCourseType);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
@@ -166,7 +218,11 @@ const Index = () => {
         {/* Quick Actions */}
         <div className="grid grid-cols-2 gap-3 mb-8">
           {quickActions.map((action, index) => (
-            <Card key={index} className="bg-gray-900/50 border-gray-700 hover:border-purple-500/50 transition-all">
+            <Card 
+              key={index} 
+              className="bg-gray-900/50 border-gray-700 hover:border-purple-500/50 transition-all cursor-pointer"
+              onClick={() => handleQuickActionClick(action.type)}
+            >
               <CardContent className="p-4 text-center">
                 <div className={`w-12 h-12 ${action.color} rounded-full flex items-center justify-center mx-auto mb-2`}>
                   <div className="text-white">
@@ -302,6 +358,72 @@ const Index = () => {
           </Button>
         </div>
       </div>
+
+      {/* Video Library Modal */}
+      {showVideoLibrary && selectedCourse && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-gray-900 rounded-2xl w-full max-w-md max-h-[80vh] overflow-hidden">
+            <div className="flex items-center justify-between p-4 border-b border-gray-700">
+              <div className="flex items-center space-x-3">
+                <div className={`w-10 h-10 rounded-lg bg-gradient-to-r ${selectedCourse.color} flex items-center justify-center`}>
+                  <div className="text-white">
+                    {selectedCourse.icon}
+                  </div>
+                </div>
+                <div>
+                  <h2 className="text-white font-semibold">{selectedCourse.title}</h2>
+                  <p className="text-gray-400 text-sm">{selectedCourse.lessons} Free Videos</p>
+                </div>
+              </div>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => setShowVideoLibrary(false)}
+                className="text-gray-400 hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
+            
+            <div className="p-4 overflow-y-auto max-h-[60vh]">
+              <div className="space-y-3">
+                {selectedCourse.videos.map((video, index) => (
+                  <Card key={index} className="bg-gray-800/50 border-gray-700 hover:border-purple-500/50 transition-all cursor-pointer">
+                    <CardContent className="p-4">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-12 h-12 bg-gray-700 rounded-lg flex items-center justify-center">
+                          <Play className="w-6 h-6 text-white" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="text-white font-medium text-sm">{video.title}</h3>
+                          <p className="text-gray-400 text-xs">{video.duration}</p>
+                        </div>
+                        <Badge className="bg-green-500/20 text-green-300 text-xs">
+                          FREE
+                        </Badge>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+              
+              <div className="mt-6">
+                <Button 
+                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                  onClick={() => {
+                    setAuthMode('signup');
+                    setShowAuth(true);
+                    setShowVideoLibrary(false);
+                  }}
+                >
+                  <Play className="w-4 h-4 mr-2" />
+                  Start Learning Free
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Auth Modal */}
       {showAuth && (
