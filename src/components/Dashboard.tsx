@@ -56,7 +56,6 @@ const Dashboard = () => {
 
       <div className="px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          {/* Home Tab */}
           <TabsContent value="home" className="space-y-6">
             <div>
               <h2 className="text-xl font-bold text-white mb-4">Quick Actions</h2>
@@ -69,7 +68,6 @@ const Dashboard = () => {
             />
           </TabsContent>
 
-          {/* Courses Tab */}
           <TabsContent value="courses" className="space-y-6">
             <CourseSection 
               title="My Courses"
@@ -78,18 +76,15 @@ const Dashboard = () => {
             />
           </TabsContent>
 
-          {/* Create Tab */}
           <TabsContent value="create" className="space-y-6">
             <h2 className="text-xl font-bold text-white mb-4">Create Something Amazing</h2>
             <QuickActions variant="list" />
           </TabsContent>
 
-          {/* Search Tab */}
           <TabsContent value="search" className="space-y-6">
             <SearchTab />
           </TabsContent>
 
-          {/* Profile Tab */}
           <TabsContent value="profile">
             <UserProfile />
           </TabsContent>
