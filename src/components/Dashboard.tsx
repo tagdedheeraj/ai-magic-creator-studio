@@ -8,6 +8,7 @@ import DashboardHeader from './DashboardHeader';
 import QuickActions from './QuickActions';
 import CourseSection from './CourseSection';
 import SearchTab from './SearchTab';
+import QuickActionsGrid from './QuickActionsGrid';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -50,6 +51,11 @@ const Dashboard = () => {
 
   const incompleteCourses = myCoursesData.filter(course => course.completedVideos < course.totalVideos);
 
+  const handleQuickActionClick = (type: string) => {
+    console.log('Course clicked:', type);
+    // Add functionality to handle course selection
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 pb-20">
       <DashboardHeader userName={user?.name || 'User'} />
@@ -69,16 +75,11 @@ const Dashboard = () => {
           </TabsContent>
 
           <TabsContent value="courses" className="space-y-6">
-            <CourseSection 
-              title="My Courses"
-              courses={myCoursesData}
-              showBrowseMore={true}
-            />
-          </TabsContent>
-
-          <TabsContent value="create" className="space-y-6">
-            <h2 className="text-xl font-bold text-white mb-4">Create Something Amazing</h2>
-            <QuickActions variant="list" />
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-white mb-4">Free Amazing Courses</h2>
+              <p className="text-gray-400 mb-6">सभी courses बिल्कुल free हैं और professional skills सिखाते हैं</p>
+            </div>
+            <QuickActionsGrid onActionClick={handleQuickActionClick} />
           </TabsContent>
 
           <TabsContent value="search" className="space-y-6">
