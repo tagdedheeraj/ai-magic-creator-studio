@@ -18,7 +18,7 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({ activeTab, onTabChange }) =
   const navItems = [
     { id: 'home', icon: Home, label: 'Home' },
     { id: 'courses', icon: BookOpen, label: 'Courses' },
-    { id: 'create', icon: Video, label: 'Create' },
+    { id: 'create', icon: Video, label: 'Courses' },
     { id: 'search', icon: Search, label: 'Search' },
     { id: 'profile', icon: User, label: 'Profile' }
   ];

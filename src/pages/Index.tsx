@@ -11,6 +11,8 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import CTASection from "@/components/CTASection";
 import VideoLibraryModal from "@/components/VideoLibraryModal";
 import BottomNavBar from "@/components/BottomNavBar";
+import YouTubeVideoPlayer from "@/components/YouTubeVideoPlayer";
+import EngagementSection from "@/components/EngagementSection";
 import { getCourseData } from "@/data/coursesData";
 
 const Index = () => {
@@ -18,6 +20,7 @@ const Index = () => {
   const [showAuth, setShowAuth] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [showVideoLibrary, setShowVideoLibrary] = useState(false);
+  const [showYouTubeVideo, setShowYouTubeVideo] = useState(false);
   const [selectedCourseType, setSelectedCourseType] = useState<string>('');
   const [activeTab, setActiveTab] = useState('home');
 
@@ -59,6 +62,10 @@ const Index = () => {
         return (
           <>
             <HeroSection onSignupClick={handleSignupClick} />
+            <EngagementSection 
+              onWatchVideo={() => setShowYouTubeVideo(true)}
+              onSignupClick={handleSignupClick}
+            />
             <QuickActionsGrid onActionClick={handleQuickActionClick} />
             <FeaturesGrid />
           </>
@@ -69,10 +76,10 @@ const Index = () => {
         return (
           <div className="space-y-6">
             <div className="text-center">
-              <h2 className="text-2xl font-bold text-white mb-4">Create Amazing Content</h2>
-              <p className="text-gray-400 mb-6">Choose from our powerful AI tools</p>
+              <h2 className="text-2xl font-bold text-white mb-4">Free Amazing Courses</h2>
+              <p className="text-gray-400 mb-6">हमारे professional courses से सीखें बिल्कुल free में</p>
             </div>
-            <QuickActionsGrid onActionClick={handleQuickActionClick} />
+            <CoursesList />
           </div>
         );
       case 'search':
@@ -88,6 +95,10 @@ const Index = () => {
         return (
           <>
             <HeroSection onSignupClick={handleSignupClick} />
+            <EngagementSection 
+              onWatchVideo={() => setShowYouTubeVideo(true)}
+              onSignupClick={handleSignupClick}
+            />
             <QuickActionsGrid onActionClick={handleQuickActionClick} />
             <FeaturesGrid />
           </>
@@ -115,6 +126,13 @@ const Index = () => {
         course={selectedCourse || null}
         onClose={() => setShowVideoLibrary(false)}
         onStartLearning={handleStartLearning}
+      />
+
+      <YouTubeVideoPlayer
+        videoId="1hNMTeZGcJQ"
+        isOpen={showYouTubeVideo}
+        onClose={() => setShowYouTubeVideo(false)}
+        title="AI Video Tools Introduction"
       />
 
       {showAuth && (
