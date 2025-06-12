@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import AuthModal from "@/components/AuthModal";
 import Dashboard from "@/components/Dashboard";
-import AppHeader from "@/components/AppHeader";
 import HeroSection from "@/components/HeroSection";
 import QuickActionsGrid from "@/components/QuickActionsGrid";
 import CoursesList from "@/components/CoursesList";
@@ -98,8 +97,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 pb-20">
-      <AppHeader />
-
       <div className="px-4 py-6">
         {renderContent()}
         {activeTab === 'home' && (
