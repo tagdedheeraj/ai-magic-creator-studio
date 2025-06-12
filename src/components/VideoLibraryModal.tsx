@@ -10,7 +10,7 @@ interface Course {
   title: string;
   lessons: number;
   color: string;
-  videos: { title: string; duration: string }[];
+  videos: { title: string; duration: string; youtubeId?: string }[];
 }
 
 interface VideoLibraryModalProps {
@@ -18,15 +18,23 @@ interface VideoLibraryModalProps {
   course: Course | null;
   onClose: () => void;
   onStartLearning: () => void;
+  onVideoClick: (videoId: string, title: string) => void;
 }
 
 const VideoLibraryModal: React.FC<VideoLibraryModalProps> = ({
   isOpen,
   course,
   onClose,
-  onStartLearning
+  onStartLearning,
+  onVideoClick
 }) => {
   if (!isOpen || !course) return null;
+
+  const handleVideoClick = (video: { title: string; duration: string; youtubeId?: string }) => {
+    if (video.youtubeId) {
+      onVideoClick(video.youtubeId, video.title);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
@@ -56,7 +64,11 @@ const VideoLibraryModal: React.FC<VideoLibraryModalProps> = ({
         <div className="p-4 overflow-y-auto max-h-[60vh]">
           <div className="space-y-3">
             {course.videos.map((video, index) => (
-              <Card key={index} className="bg-gray-800/50 border-gray-700 hover:border-purple-500/50 transition-all cursor-pointer">
+              <Card 
+                key={index} 
+                className="bg-gray-800/50 border-gray-700 hover:border-purple-500/50 transition-all cursor-pointer"
+                onClick={() => handleVideoClick(video)}
+              >
                 <CardContent className="p-4">
                   <div className="flex items-center space-x-3">
                     <div className="w-12 h-12 bg-gray-700 rounded-lg flex items-center justify-center">
