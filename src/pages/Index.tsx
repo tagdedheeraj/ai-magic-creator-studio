@@ -11,6 +11,7 @@ import FeaturesGrid from "@/components/FeaturesGrid";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import CTASection from "@/components/CTASection";
 import VideoLibraryModal from "@/components/VideoLibraryModal";
+import BottomNavBar from "@/components/BottomNavBar";
 import { getCourseData } from "@/data/coursesData";
 
 const Index = () => {
@@ -19,6 +20,7 @@ const Index = () => {
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [showVideoLibrary, setShowVideoLibrary] = useState(false);
   const [selectedCourseType, setSelectedCourseType] = useState<string>('');
+  const [activeTab, setActiveTab] = useState('home');
 
   // If user is logged in, show dashboard
   if (user) {
@@ -44,18 +46,72 @@ const Index = () => {
     setShowVideoLibrary(false);
   };
 
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    if (tab === 'profile') {
+      setAuthMode('login');
+      setShowAuth(true);
+    }
+  };
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'home':
+        return (
+          <>
+            <HeroSection onSignupClick={handleSignupClick} />
+            <QuickActionsGrid onActionClick={handleQuickActionClick} />
+            <FeaturesGrid />
+          </>
+        );
+      case 'courses':
+        return <CoursesList />;
+      case 'create':
+        return (
+          <div className="space-y-6">
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-white mb-4">Create Amazing Content</h2>
+              <p className="text-gray-400 mb-6">Choose from our powerful AI tools</p>
+            </div>
+            <QuickActionsGrid onActionClick={handleQuickActionClick} />
+          </div>
+        );
+      case 'search':
+        return (
+          <div className="space-y-6">
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-white mb-4">Explore Courses</h2>
+            </div>
+            <CoursesList />
+          </div>
+        );
+      default:
+        return (
+          <>
+            <HeroSection onSignupClick={handleSignupClick} />
+            <QuickActionsGrid onActionClick={handleQuickActionClick} />
+            <FeaturesGrid />
+          </>
+        );
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 pb-20">
       <AppHeader />
 
       <div className="px-4 py-6">
-        <HeroSection onSignupClick={handleSignupClick} />
-        <QuickActionsGrid onActionClick={handleQuickActionClick} />
-        <CoursesList />
-        <FeaturesGrid />
-        <TestimonialsSection />
-        <CTASection onSignupClick={handleSignupClick} />
+        {renderContent()}
+        {activeTab === 'home' && (
+          <>
+            <TestimonialsSection />
+            <CTASection onSignupClick={handleSignupClick} />
+          </>
+        )}
       </div>
+
+      {/* Bottom Navigation for non-logged-in users */}
+      <BottomNavBar activeTab={activeTab} onTabChange={handleTabChange} />
 
       <VideoLibraryModal
         isOpen={showVideoLibrary}
