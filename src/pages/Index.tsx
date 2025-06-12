@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,17 +24,19 @@ import {
   Gift,
   X
 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 import AuthModal from "@/components/AuthModal";
 import Dashboard from "@/components/Dashboard";
 
 const Index = () => {
+  const { user } = useAuth();
   const [showAuth, setShowAuth] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [showVideoLibrary, setShowVideoLibrary] = useState(false);
   const [selectedCourseType, setSelectedCourseType] = useState<string>('');
 
-  if (isLoggedIn) {
+  // If user is logged in, show dashboard
+  if (user) {
     return <Dashboard />;
   }
 
@@ -431,7 +432,6 @@ const Index = () => {
           mode={authMode}
           onClose={() => setShowAuth(false)}
           onSuccess={() => {
-            setIsLoggedIn(true);
             setShowAuth(false);
           }}
           onSwitchMode={(mode) => setAuthMode(mode)}
