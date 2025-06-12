@@ -13,6 +13,9 @@ import VideoLibraryModal from "@/components/VideoLibraryModal";
 import YouTubeVideoPlayer from "@/components/YouTubeVideoPlayer";
 import BottomNavBar from "@/components/BottomNavBar";
 import { getCourseData } from "@/data/coursesData";
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Play, Star } from 'lucide-react';
 
 const Index = () => {
   const { user } = useAuth();
@@ -35,6 +38,11 @@ const Index = () => {
 
   const handleQuickActionClick = (type: string) => {
     setSelectedCourseType(type);
+    setShowVideoLibrary(true);
+  };
+
+  const handleCourseClick = (courseType: string) => {
+    setSelectedCourseType(courseType);
     setShowVideoLibrary(true);
   };
 
@@ -81,7 +89,32 @@ const Index = () => {
               <h2 className="text-2xl font-bold text-white mb-4">Free Amazing Courses</h2>
               <p className="text-gray-400 mb-6">सभी courses बिल्कुल free हैं और professional skills सिखाते हैं</p>
             </div>
-            <QuickActionsGrid onActionClick={handleQuickActionClick} />
+            <div className="grid grid-cols-2 gap-3 mb-8">
+              {courses.map((course, index) => (
+                <Card 
+                  key={index} 
+                  className="bg-gray-900/50 border-gray-700 hover:border-purple-500/50 transition-all cursor-pointer"
+                  onClick={() => handleCourseClick(course.type)}
+                >
+                  <CardContent className="p-4 text-center">
+                    <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${course.color} flex items-center justify-center mx-auto mb-2`}>
+                      <div className="text-white">
+                        {course.icon}
+                      </div>
+                    </div>
+                    <h3 className="text-white text-sm font-medium mb-1">{course.title}</h3>
+                    <p className="text-gray-400 text-xs mb-2">{course.lessons} videos • {course.duration}</p>
+                    <div className="flex items-center justify-center space-x-1 mb-2">
+                      <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                      <span className="text-yellow-400 text-xs">4.8</span>
+                      <Badge className="bg-green-500/20 text-green-300 text-xs ml-1">
+                        FREE
+                      </Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
         );
       case 'search':
