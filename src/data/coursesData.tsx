@@ -31,7 +31,11 @@ export const getCourseData = () => [
     students: "1.8K+",
     type: "video",
     videos: [
-      { title: "AI Video Tools Introduction", duration: "4:20" },
+      { 
+        title: "AI Video Tools Introduction", 
+        duration: "4:20",
+        youtubeId: "1hNMTeZGcJQ"
+      },
       { title: "Creating cinematic shots", duration: "12:30" },
       { title: "Adding effects and transitions", duration: "9:45" },
       { title: "Professional editing tips", duration: "11:20" }

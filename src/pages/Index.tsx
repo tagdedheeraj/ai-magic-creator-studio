@@ -10,6 +10,7 @@ import FeaturesGrid from "@/components/FeaturesGrid";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import CTASection from "@/components/CTASection";
 import VideoLibraryModal from "@/components/VideoLibraryModal";
+import YouTubeVideoPlayer from "@/components/YouTubeVideoPlayer";
 import BottomNavBar from "@/components/BottomNavBar";
 import { getCourseData } from "@/data/coursesData";
 
@@ -20,6 +21,9 @@ const Index = () => {
   const [showVideoLibrary, setShowVideoLibrary] = useState(false);
   const [selectedCourseType, setSelectedCourseType] = useState<string>('');
   const [activeTab, setActiveTab] = useState('home');
+  const [showYouTubeVideo, setShowYouTubeVideo] = useState(false);
+  const [currentVideoId, setCurrentVideoId] = useState<string>('');
+  const [currentVideoTitle, setCurrentVideoTitle] = useState<string>('');
 
   // If user is logged in, show dashboard
   if (user) {
@@ -51,6 +55,13 @@ const Index = () => {
       setAuthMode('login');
       setShowAuth(true);
     }
+  };
+
+  const handleVideoClick = (videoId: string, title: string) => {
+    setCurrentVideoId(videoId);
+    setCurrentVideoTitle(title);
+    setShowYouTubeVideo(true);
+    setShowVideoLibrary(false);
   };
 
   const renderContent = () => {
@@ -115,6 +126,14 @@ const Index = () => {
         course={selectedCourse || null}
         onClose={() => setShowVideoLibrary(false)}
         onStartLearning={handleStartLearning}
+        onVideoClick={handleVideoClick}
+      />
+
+      <YouTubeVideoPlayer
+        isOpen={showYouTubeVideo}
+        onClose={() => setShowYouTubeVideo(false)}
+        videoId={currentVideoId}
+        title={currentVideoTitle}
       />
 
       {showAuth && (
