@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import AuthModal from "@/components/AuthModal";
@@ -76,11 +77,7 @@ const Index = () => {
       case 'courses':
         return (
           <div className="space-y-6">
-            <div className="text-center">
-              <h2 className="text-2xl font-bold text-white mb-4">Free Amazing Courses</h2>
-              <p className="text-gray-400 mb-6">सभी courses बिल्कुल free हैं और professional skills सिखाते हैं</p>
-            </div>
-            <QuickActionsGrid onActionClick={handleQuickActionClick} />
+            <CoursesList />
           </div>
         );
       case 'search':
