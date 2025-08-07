@@ -19,6 +19,10 @@ const config: CapacitorConfig = {
     StatusBar: {
       style: 'dark',
       backgroundColor: '#1e1b4b'
+    },
+    AdMob: {
+      appId: 'ca-app-pub-2211398170597117~4414737121',
+      initializeForTesting: true
     }
   }
 };

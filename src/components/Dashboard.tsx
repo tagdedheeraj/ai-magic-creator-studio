@@ -1,7 +1,7 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
+import { useInterstitialAd } from '@/hooks/useInterstitialAd';
 import UserProfile from './UserProfile';
 import BottomNavBar from './BottomNavBar';
 import DashboardHeader from './DashboardHeader';
@@ -9,10 +9,13 @@ import QuickActions from './QuickActions';
 import CourseSection from './CourseSection';
 import SearchTab from './SearchTab';
 import CoursesList from './CoursesList';
+import BannerAd from './ads/BannerAd';
 
 const Dashboard = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('home');
+  const [tabSwitchCount, setTabSwitchCount] = useState(0);
+  const { showInterstitial } = useInterstitialAd();
 
   const myCoursesData = [
     {
@@ -51,12 +54,22 @@ const Dashboard = () => {
 
   const incompleteCourses = myCoursesData.filter(course => course.completedVideos < course.totalVideos);
 
+  const handleTabChange = async (tab: string) => {
+    setActiveTab(tab);
+    setTabSwitchCount(prev => prev + 1);
+
+    // Show interstitial ad every 3 tab switches
+    if (tabSwitchCount > 0 && tabSwitchCount % 3 === 0) {
+      await showInterstitial();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 pb-20">
       <DashboardHeader userName={user?.name || 'User'} />
 
       <div className="px-4 py-6">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
           <TabsContent value="home" className="space-y-6">
             <div>
               <h2 className="text-xl font-bold text-white mb-4">Quick Actions</h2>
@@ -83,7 +96,10 @@ const Dashboard = () => {
         </Tabs>
       </div>
 
-      <BottomNavBar activeTab={activeTab} onTabChange={setActiveTab} />
+      {/* Banner Ad at bottom */}
+      <BannerAd show={true} />
+
+      <BottomNavBar activeTab={activeTab} onTabChange={handleTabChange} />
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useInterstitialAd } from "@/hooks/useInterstitialAd";
 import AuthModal from "@/components/AuthModal";
 import Dashboard from "@/components/Dashboard";
 import HeroSection from "@/components/HeroSection";
@@ -11,10 +12,11 @@ import CTASection from "@/components/CTASection";
 import VideoLibraryModal from "@/components/VideoLibraryModal";
 import YouTubeVideoPlayer from "@/components/YouTubeVideoPlayer";
 import BottomNavBar from "@/components/BottomNavBar";
+import BannerAd from "@/components/ads/BannerAd";
 import { getCourseData } from "@/data/coursesData";
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Play, Star } from 'lucide-react';
+import { Star } from 'lucide-react';
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -27,6 +29,7 @@ const Index = () => {
   const [showYouTubeVideo, setShowYouTubeVideo] = useState(false);
   const [currentVideoId, setCurrentVideoId] = useState<string>('');
   const [currentVideoTitle, setCurrentVideoTitle] = useState<string>('');
+  const { showInterstitial } = useInterstitialAd();
 
   // If user is logged in, show dashboard
   if (user) {
@@ -51,7 +54,9 @@ const Index = () => {
     setShowAuth(true);
   };
 
-  const handleStartLearning = () => {
+  const handleStartLearning = async () => {
+    // Show interstitial ad before signup
+    await showInterstitial();
     setAuthMode('signup');
     setShowAuth(true);
     setShowVideoLibrary(false);
@@ -65,11 +70,17 @@ const Index = () => {
     }
   };
 
-  const handleVideoClick = (videoId: string, title: string) => {
+  const handleVideoClick = async (videoId: string, title: string) => {
     setCurrentVideoId(videoId);
     setCurrentVideoTitle(title);
     setShowYouTubeVideo(true);
     setShowVideoLibrary(false);
+  };
+
+  const handleVideoClose = async () => {
+    setShowYouTubeVideo(false);
+    // Show interstitial ad when closing video
+    await showInterstitial();
   };
 
   const renderContent = () => {
@@ -150,6 +161,9 @@ const Index = () => {
         <Footer />
       </div>
 
+      {/* Banner Ad for non-logged-in users */}
+      <BannerAd show={true} />
+
       {/* Bottom Navigation for non-logged-in users */}
       <BottomNavBar activeTab={activeTab} onTabChange={handleTabChange} />
 
@@ -163,7 +177,7 @@ const Index = () => {
 
       <YouTubeVideoPlayer
         isOpen={showYouTubeVideo}
-        onClose={() => setShowYouTubeVideo(false)}
+        onClose={handleVideoClose}
         videoId={currentVideoId}
         title={currentVideoTitle}
       />
