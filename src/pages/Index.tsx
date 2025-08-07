@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import AuthModal from "@/components/AuthModal";
@@ -16,6 +15,7 @@ import { getCourseData } from "@/data/coursesData";
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Play, Star } from 'lucide-react';
+import Footer from "@/components/Footer";
 
 const Index = () => {
   const { user } = useAuth();
@@ -147,6 +147,7 @@ const Index = () => {
             <CTASection onSignupClick={handleSignupClick} />
           </>
         )}
+        <Footer />
       </div>
 
       {/* Bottom Navigation for non-logged-in users */}

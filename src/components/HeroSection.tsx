@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -17,9 +16,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSignupClick }) => {
       </Badge>
       
       <h1 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-white via-purple-200 to-cyan-200 bg-clip-text text-transparent">
-        AI से बनाएं
+        AI Tools Hindi
         <span className="block bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-          सब कुछ Professional
+          Professional Content बनाएं
         </span>
       </h1>
       
