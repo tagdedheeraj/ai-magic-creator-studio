@@ -1,5 +1,5 @@
 
-import { AdMob, BannerAdOptions, BannerAdSize, BannerAdPosition, InterstitialAdOptions, RewardAdOptions, AdMobRewardItem, AdLoadInfo } from '@capacitor-community/admob';
+import { AdMob, BannerAdOptions, BannerAdSize, BannerAdPosition, RewardAdOptions, AdMobRewardItem, AdLoadInfo } from '@capacitor-community/admob';
 
 class AdMobService {
   private isInitialized = false;
@@ -18,7 +18,6 @@ class AdMobService {
     
     try {
       await AdMob.initialize({
-        requestTrackingAuthorization: true,
         testingDevices: ['YOUR_DEVICE_ID'], // Replace with actual device ID for testing
         initializeForTesting: true
       });
@@ -67,13 +66,13 @@ class AdMobService {
     }
 
     try {
-      const options: InterstitialAdOptions = {
+      const options: RewardAdOptions = {
         adId: this.adUnits.interstitial,
         isTesting: true
       };
 
-      await AdMob.prepareInterstitial(options);
-      await AdMob.showInterstitial();
+      await AdMob.prepareRewardVideoAd(options);
+      await AdMob.showRewardVideoAd();
       
       this.lastInterstitialTime = now;
       console.log('Interstitial ad shown');
