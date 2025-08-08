@@ -5,19 +5,24 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAdminAuth } from '@/contexts/AdminAuthContext';
-import { Lock, User } from 'lucide-react';
+import { Lock, User, AlertCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const AdminLogin: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('admin@aitoolshindi.com');
+  const [password, setPassword] = useState('admin123');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const { login } = useAdminAuth();
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     setIsLoading(true);
+
+    console.log('Login attempt with:', { email, password: '***' });
 
     try {
       const success = await login(email, password);
@@ -27,6 +32,7 @@ const AdminLogin: React.FC = () => {
           description: "Welcome to admin panel",
         });
       } else {
+        setError('Invalid email or password. Please check your credentials.');
         toast({
           title: "Login Failed",
           description: "Invalid credentials",
@@ -34,6 +40,8 @@ const AdminLogin: React.FC = () => {
         });
       }
     } catch (error) {
+      console.error('Login error:', error);
+      setError('Something went wrong. Please try again.');
       toast({
         title: "Error",
         description: "Something went wrong",
@@ -55,6 +63,13 @@ const AdminLogin: React.FC = () => {
           <CardDescription>AI Tools Hindi Management</CardDescription>
         </CardHeader>
         <CardContent>
+          {error && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+          
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -68,6 +83,7 @@ const AdminLogin: React.FC = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10"
                   required
+                  disabled={isLoading}
                 />
               </div>
             </div>
@@ -83,6 +99,7 @@ const AdminLogin: React.FC = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   className="pl-10"
                   required
+                  disabled={isLoading}
                 />
               </div>
             </div>
@@ -94,8 +111,13 @@ const AdminLogin: React.FC = () => {
               {isLoading ? 'Signing in...' : 'Sign In'}
             </Button>
           </form>
-          <div className="mt-4 text-sm text-center text-muted-foreground">
-            Default: admin@aitoolshindi.com / admin123
+          
+          <div className="mt-6 p-4 bg-muted rounded-lg">
+            <h4 className="text-sm font-medium text-muted-foreground mb-2">Test Credentials:</h4>
+            <div className="text-sm space-y-1">
+              <div><strong>Email:</strong> admin@aitoolshindi.com</div>
+              <div><strong>Password:</strong> admin123</div>
+            </div>
           </div>
         </CardContent>
       </Card>

@@ -234,7 +234,30 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      authenticate_admin: {
+        Args: { email_input: string; password_input: string }
+        Returns: {
+          id: string
+          email: string
+          name: string
+          role: string
+          is_active: boolean
+          last_login: string
+        }[]
+      }
+      create_admin_user: {
+        Args: {
+          email_input: string
+          password_input: string
+          name_input: string
+          role_input?: string
+        }
+        Returns: string
+      }
+      update_admin_last_login: {
+        Args: { admin_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

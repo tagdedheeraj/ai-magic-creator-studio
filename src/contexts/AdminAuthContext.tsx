@@ -8,6 +8,7 @@ interface AdminUser {
   name: string;
   role: string;
   is_active: boolean;
+  last_login?: string;
 }
 
 interface AdminAuthContextType {
@@ -38,34 +39,36 @@ export const AdminAuthProvider: React.FC<AdminAuthProviderProps> = ({ children }
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      // For demo purposes, using simple email/password check
-      // In production, you'd want proper password hashing
-      const { data, error } = await supabase
-        .from('admin_users')
-        .select('*')
-        .eq('email', email)
-        .eq('is_active', true)
-        .single();
+      console.log('Attempting admin login for:', email);
+      
+      // Use the new security definer function for authentication
+      const { data, error } = await supabase.rpc('authenticate_admin', {
+        email_input: email,
+        password_input: password
+      });
 
-      if (error || !data) {
+      console.log('Authentication result:', { data, error });
+
+      if (error) {
         console.error('Admin login error:', error);
         return false;
       }
 
-      // Simple password check (in production use proper hashing)
-      if (password === 'admin123') {
-        setAdminUser(data);
-        localStorage.setItem('admin_user', JSON.stringify(data));
+      if (data && data.length > 0) {
+        const userData = data[0];
+        setAdminUser(userData);
+        localStorage.setItem('admin_user', JSON.stringify(userData));
         
-        // Update last login
-        await supabase
-          .from('admin_users')
-          .update({ last_login: new Date().toISOString() })
-          .eq('id', data.id);
+        // Update last login using the secure function
+        await supabase.rpc('update_admin_last_login', {
+          admin_id: userData.id
+        });
         
+        console.log('Admin login successful');
         return true;
       }
       
+      console.log('No matching admin user found');
       return false;
     } catch (error) {
       console.error('Login error:', error);
@@ -74,6 +77,7 @@ export const AdminAuthProvider: React.FC<AdminAuthProviderProps> = ({ children }
   };
 
   const logout = async () => {
+    console.log('Admin logout');
     setAdminUser(null);
     localStorage.removeItem('admin_user');
   };
@@ -84,24 +88,29 @@ export const AdminAuthProvider: React.FC<AdminAuthProviderProps> = ({ children }
       const savedUser = localStorage.getItem('admin_user');
       if (savedUser) {
         const userData = JSON.parse(savedUser);
+        console.log('Checking saved admin user:', userData.email);
         
         // Verify user still exists and is active
         const { data, error } = await supabase
           .from('admin_users')
-          .select('*')
+          .select('id, email, name, role, is_active, last_login')
           .eq('id', userData.id)
           .eq('is_active', true)
           .single();
 
         if (data && !error) {
+          console.log('Admin user verified');
           setAdminUser(data);
         } else {
+          console.log('Admin user verification failed:', error);
           localStorage.removeItem('admin_user');
+          setAdminUser(null);
         }
       }
     } catch (error) {
       console.error('Auth check error:', error);
       localStorage.removeItem('admin_user');
+      setAdminUser(null);
     } finally {
       setLoading(false);
     }

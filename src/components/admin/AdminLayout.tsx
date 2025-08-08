@@ -14,6 +14,7 @@ import {
   X
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -24,6 +25,7 @@ interface AdminLayoutProps {
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children, activeTab, onTabChange }) => {
   const { adminUser, logout } = useAdminAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { toast } = useToast();
 
   const menuItems = [
     { id: 'dashboard', name: 'Dashboard', icon: LayoutDashboard },
@@ -33,6 +35,23 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, activeTab, onTabCha
     { id: 'analytics', name: 'Analytics', icon: BarChart3 },
     { id: 'settings', name: 'Settings', icon: Settings },
   ];
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      toast({
+        title: "Logged Out",
+        description: "You have been successfully logged out",
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+      toast({
+        title: "Logout Error",
+        description: "There was an error logging out",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -87,12 +106,13 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, activeTab, onTabCha
         <div className="absolute bottom-4 left-3 right-3">
           <div className="bg-gray-50 rounded-lg p-3 mb-3">
             <div className="text-sm font-medium">{adminUser?.name}</div>
-            <div className="text-xs text-muted-foreground">{adminUser?.role}</div>
+            <div className="text-xs text-muted-foreground">{adminUser?.email}</div>
+            <div className="text-xs text-muted-foreground capitalize">{adminUser?.role?.replace('_', ' ')}</div>
           </div>
           <Button
             variant="outline"
             className="w-full"
-            onClick={logout}
+            onClick={handleLogout}
           >
             <LogOut className="mr-2 h-4 w-4" />
             Logout
@@ -113,6 +133,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, activeTab, onTabCha
             <Menu className="h-4 w-4" />
           </Button>
           <h2 className="text-lg font-semibold capitalize">{activeTab}</h2>
+          <div className="ml-auto text-sm text-muted-foreground">
+            Welcome, {adminUser?.name}
+          </div>
         </div>
 
         {/* Content */}
