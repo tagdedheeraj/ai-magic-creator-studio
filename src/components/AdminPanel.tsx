@@ -5,6 +5,8 @@ import AdminLogin from '@/components/admin/AdminLogin';
 import AdminLayout from '@/components/admin/AdminLayout';
 import AdminDashboard from '@/components/admin/AdminDashboard';
 import CourseManagement from '@/components/admin/CourseManagement';
+import VideoManagement from '@/components/admin/VideoManagement';
+import UserAnalytics from '@/components/admin/UserAnalytics';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const AdminPanelContent: React.FC = () => {
@@ -33,17 +35,7 @@ const AdminPanelContent: React.FC = () => {
       case 'courses':
         return <CourseManagement />;
       case 'videos':
-        return (
-          <Card>
-            <CardHeader>
-              <CardTitle>Video Management</CardTitle>
-              <CardDescription>Manage course videos and YouTube links</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>Video management feature coming soon...</p>
-            </CardContent>
-          </Card>
-        );
+        return <VideoManagement />;
       case 'users':
         return (
           <Card>
@@ -57,17 +49,7 @@ const AdminPanelContent: React.FC = () => {
           </Card>
         );
       case 'analytics':
-        return (
-          <Card>
-            <CardHeader>
-              <CardTitle>Analytics Dashboard</CardTitle>
-              <CardDescription>View detailed application analytics</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>Analytics dashboard coming soon...</p>
-            </CardContent>
-          </Card>
-        );
+        return <UserAnalytics />;
       case 'settings':
         return (
           <Card>
@@ -76,7 +58,7 @@ const AdminPanelContent: React.FC = () => {
               <CardDescription>Configure application settings</CardDescription>
             </CardHeader>
             <CardContent>
-              <p>Settings management coming soon...</p>
+              <p>Settings management feature coming soon...</p>
             </CardContent>
           </Card>
         );
