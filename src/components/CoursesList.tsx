@@ -3,11 +3,51 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Play, Star, ArrowRight } from 'lucide-react';
-import { getCourseData } from '@/data/coursesData';
+import { useCourses } from '@/hooks/useCourses';
+import { getIconComponent } from '@/utils/iconMapper';
 
 const CoursesList = () => {
-  const courses = getCourseData();
+  const { courses, loading, error } = useCourses();
+
+  if (loading) {
+    return (
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <Skeleton className="h-6 w-48" />
+          <Skeleton className="h-8 w-24" />
+        </div>
+        
+        <div className="space-y-4">
+          {[...Array(3)].map((_, index) => (
+            <Card key={index} className="bg-gray-900/50 border-gray-700">
+              <CardContent className="p-4">
+                <div className="flex items-start space-x-3">
+                  <Skeleton className="w-12 h-12 rounded-lg" />
+                  <div className="flex-1">
+                    <Skeleton className="h-4 w-3/4 mb-2" />
+                    <Skeleton className="h-3 w-full mb-2" />
+                    <Skeleton className="h-3 w-1/2" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="mb-8">
+        <div className="text-center py-8">
+          <p className="text-red-400">{error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mb-8">
@@ -19,13 +59,13 @@ const CoursesList = () => {
       </div>
       
       <div className="space-y-4">
-        {courses.map((course, index) => (
-          <Card key={index} className="bg-gray-900/50 border-gray-700 hover:border-purple-500/50 transition-all">
+        {courses.map((course) => (
+          <Card key={course.id} className="bg-gray-900/50 border-gray-700 hover:border-purple-500/50 transition-all">
             <CardContent className="p-4">
               <div className="flex items-start space-x-3">
                 <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${course.color} flex items-center justify-center flex-shrink-0`}>
                   <div className="text-white">
-                    {course.icon}
+                    {getIconComponent(course.icon_name)}
                   </div>
                 </div>
                 <div className="flex-1 min-w-0">
@@ -55,7 +95,7 @@ const CoursesList = () => {
                 </div>
               </div>
             </CardContent>
-          </Card>
+          </CardContent>
         ))}
       </div>
     </div>
