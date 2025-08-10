@@ -18,11 +18,11 @@ class AdMobService {
     
     try {
       await AdMob.initialize({
-        testingDevices: ['YOUR_DEVICE_ID'], // Replace with actual device ID for testing
-        initializeForTesting: true
+        testingDevices: [], // Removed testing device IDs for production
+        initializeForTesting: false // Changed to false for live ads
       });
       this.isInitialized = true;
-      console.log('AdMob initialized successfully');
+      console.log('AdMob initialized successfully for production');
     } catch (error) {
       console.error('Failed to initialize AdMob:', error);
     }
@@ -37,11 +37,11 @@ class AdMobService {
         adSize: BannerAdSize.BANNER,
         position: BannerAdPosition.BOTTOM_CENTER,
         margin: 0,
-        isTesting: true
+        isTesting: false // Changed to false for live ads
       };
       
       await AdMob.showBanner(options);
-      console.log('Banner ad shown');
+      console.log('Live banner ad shown');
     } catch (error) {
       console.error('Failed to show banner ad:', error);
     }
@@ -68,14 +68,14 @@ class AdMobService {
     try {
       const options: RewardAdOptions = {
         adId: this.adUnits.interstitial,
-        isTesting: true
+        isTesting: false // Changed to false for live ads
       };
 
       await AdMob.prepareRewardVideoAd(options);
       await AdMob.showRewardVideoAd();
       
       this.lastInterstitialTime = now;
-      console.log('Interstitial ad shown');
+      console.log('Live interstitial ad shown');
       return true;
     } catch (error) {
       console.error('Failed to show interstitial ad:', error);
@@ -89,12 +89,12 @@ class AdMobService {
     try {
       const options: RewardAdOptions = {
         adId: this.adUnits.appOpen,
-        isTesting: true
+        isTesting: false // Changed to false for live ads
       };
 
       await AdMob.prepareRewardVideoAd(options);
       await AdMob.showRewardVideoAd();
-      console.log('App open ad shown');
+      console.log('Live app open ad shown');
     } catch (error) {
       console.error('Failed to show app open ad:', error);
     }
