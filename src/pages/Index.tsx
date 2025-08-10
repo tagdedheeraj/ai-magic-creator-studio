@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useInterstitialAd } from "@/hooks/useInterstitialAd";
@@ -23,6 +22,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Star } from 'lucide-react';
 import Footer from "@/components/Footer";
 import { getIconComponent } from "@/utils/iconMapper";
+import MobileHeader from "@/components/MobileHeader";
 
 const Index = () => {
   const { user } = useAuth();
@@ -178,6 +178,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 pb-20">
+      <MobileHeader />
+      
       <div className="px-4 py-6">
         {renderContent()}
         {activeTab === 'home' && (
