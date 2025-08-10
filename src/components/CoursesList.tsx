@@ -95,7 +95,7 @@ const CoursesList = () => {
                 </div>
               </div>
             </CardContent>
-          </CardContent>
+          </Card>
         ))}
       </div>
     </div>
