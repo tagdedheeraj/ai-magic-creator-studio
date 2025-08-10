@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react';
-import { StatusBar } from '@capacitor/status-bar';
+import { StatusBar, Style } from '@capacitor/status-bar';
 import { Capacitor } from '@capacitor/core';
 
 export const useSafeArea = () => {
@@ -13,12 +13,13 @@ export const useSafeArea = () => {
         setIsNativePlatform(true);
         
         try {
-          // Set status bar style
-          await StatusBar.setStyle({ style: 'dark' });
+          // Set status bar style using the correct enum
+          await StatusBar.setStyle({ style: Style.Dark });
           await StatusBar.setBackgroundColor({ color: '#1e1b4b' });
           
-          // Get status bar info
+          // Get status bar info and use the correct property
           const info = await StatusBar.getInfo();
+          // StatusBarInfo has a 'height' property on Android, but we need to handle it properly
           setSafeAreaTop(info.height || 0);
         } catch (error) {
           console.log('Status bar not available:', error);
