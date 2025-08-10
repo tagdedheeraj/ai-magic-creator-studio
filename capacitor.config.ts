@@ -18,9 +18,7 @@ const config: CapacitorConfig = {
     },
     StatusBar: {
       style: 'dark',
-      backgroundColor: '#1e1b4b',
-      overlaysWebView: false,
-      androidStatusBarBackgroundColor: '#1e1b4b'
+      backgroundColor: '#1e1b4b'
     },
     AdMob: {
       appId: 'ca-app-pub-2211398170597117~4414737121',
