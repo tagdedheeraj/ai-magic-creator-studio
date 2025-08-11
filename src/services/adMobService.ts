@@ -1,3 +1,4 @@
+
 import { AdMob, BannerAdOptions, BannerAdSize, BannerAdPosition } from '@capacitor-community/admob';
 import { Capacitor } from '@capacitor/core';
 
@@ -98,11 +99,12 @@ class AdMobService {
     if (!this.isInitialized) await this.initialize();
 
     try {
-      await AdMob.prepareAppOpenAd({
+      // For v7, app open ads use the same prepare/show pattern as interstitials
+      await AdMob.prepareInterstitial({
         adId: this.adUnits.appOpen,
         isTesting: this.isTestMode,
       });
-      await AdMob.showAppOpenAd();
+      await AdMob.showInterstitial();
       console.log(`${this.isTestMode ? 'Test' : 'Live'} app open ad shown`);
     } catch (error) {
       console.error('Failed to show app open ad:', error);
