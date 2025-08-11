@@ -1,5 +1,4 @@
-
-import { AdMob, BannerAdOptions, BannerAdSize, BannerAdPosition, InterstitialAdOptions, AdMobRewardItem, AdLoadInfo } from '@capacitor-community/admob';
+import { AdMob, BannerAdOptions, BannerAdSize, BannerAdPosition } from '@capacitor-community/admob';
 import { Capacitor } from '@capacitor/core';
 
 class AdMobService {
@@ -68,10 +67,9 @@ class AdMobService {
 
   async showInterstitial(): Promise<boolean> {
     if (!this.isNativePlatform()) return false;
-    
+
     if (!this.isInitialized) await this.initialize();
-    
-    // Check cooldown
+
     const now = Date.now();
     if (now - this.lastInterstitialTime < this.interstitialCooldown) {
       console.log('Interstitial ad on cooldown');
@@ -79,14 +77,12 @@ class AdMobService {
     }
 
     try {
-      const options: InterstitialAdOptions = {
+      await AdMob.prepareInterstitial({
         adId: this.adUnits.interstitial,
-        isTesting: this.isTestMode
-      };
-
-      await AdMob.prepareInterstitial(options);
+        isTesting: this.isTestMode,
+      });
       await AdMob.showInterstitial();
-      
+
       this.lastInterstitialTime = now;
       console.log(`${this.isTestMode ? 'Test' : 'Live'} interstitial ad shown`);
       return true;
@@ -98,17 +94,15 @@ class AdMobService {
 
   async showAppOpen() {
     if (!this.isNativePlatform()) return;
-    
-    if (!this.isInitialized) await this.initialize();
-    
-    try {
-      const options: InterstitialAdOptions = {
-        adId: this.adUnits.appOpen,
-        isTesting: this.isTestMode
-      };
 
-      await AdMob.prepareInterstitial(options);
-      await AdMob.showInterstitial();
+    if (!this.isInitialized) await this.initialize();
+
+    try {
+      await AdMob.prepareAppOpenAd({
+        adId: this.adUnits.appOpen,
+        isTesting: this.isTestMode,
+      });
+      await AdMob.showAppOpenAd();
       console.log(`${this.isTestMode ? 'Test' : 'Live'} app open ad shown`);
     } catch (error) {
       console.error('Failed to show app open ad:', error);
