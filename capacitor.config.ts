@@ -6,10 +6,11 @@ const config: CapacitorConfig = {
   appName: 'AI Tools Hindi',
   webDir: 'dist',
   bundledWebRuntime: false,
-  server: {
-    url: 'https://2ddcc325-6c9b-4f72-9232-73972f9c8e5f.lovableproject.com?forceHideBadge=true',
-    cleartext: true
-  },
+  // Remove server config for production builds
+  // server: {
+  //   url: 'https://2ddcc325-6c9b-4f72-9232-73972f9c8e5f.lovableproject.com?forceHideBadge=true',
+  //   cleartext: true
+  // },
   plugins: {
     SplashScreen: {
       launchShowDuration: 2000,
@@ -22,7 +23,7 @@ const config: CapacitorConfig = {
     },
     AdMob: {
       appId: 'ca-app-pub-2211398170597117~4414737121',
-      initializeForTesting: false // Changed to false for live ads
+      initializeForTesting: false
     }
   }
 };
