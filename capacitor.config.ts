@@ -6,11 +6,13 @@ const config: CapacitorConfig = {
   appName: 'AI Tools Hindi',
   webDir: 'dist',
   bundledWebRuntime: false,
-  // Remove server config for production builds
-  // server: {
-  //   url: 'https://2ddcc325-6c9b-4f72-9232-73972f9c8e5f.lovableproject.com?forceHideBadge=true',
-  //   cleartext: true
-  // },
+  
+  // Development server configuration (comment out for production builds)
+  server: {
+    url: 'https://2ddcc325-6c9b-4f72-9232-73972f9c8e5f.lovableproject.com?forceHideBadge=true',
+    cleartext: true
+  },
+  
   plugins: {
     SplashScreen: {
       launchShowDuration: 2000,
